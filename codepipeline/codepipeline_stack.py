@@ -86,7 +86,7 @@ class CodepipelineStack(Stack):
             }),
             environment=codebuild.BuildEnvironment(
                 build_image=codebuild.LinuxBuildImage.from_docker_registry(custom_image),
-                privileged=None  # Set to True if you need elevated privileges
+                # privileged=None  # Set to True if you need elevated privileges
             ),
 
             role=iam.Role.from_role_arn(

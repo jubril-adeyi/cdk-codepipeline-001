@@ -3,11 +3,11 @@ import os
 
 import aws_cdk as cdk
 
-from codepipline.codepipline_stack import CodepiplineStack
+from codepipeline.codepipline_stack import CodepipelineStack
 
 
 app = cdk.App()
-CodepiplineStack(app, "CodepiplineStack",
+CodepipelineStack(app, "CodepipelineStack",
     )
 
 

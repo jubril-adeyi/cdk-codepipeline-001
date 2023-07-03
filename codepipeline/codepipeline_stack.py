@@ -16,7 +16,8 @@ class CodepipelineStack(Stack):
         # Create the CodePipeline pipeline
         self.pipeline = codepipeline.Pipeline(self, "MyPipeline")
         source_output = codepipeline.Artifact("SourceOutput")
-        build_output = codepipeline.Artifact("BuildOutput")
+        build_output1 = codepipeline.Artifact("BuildOutput")
+        build_output2 = codepipeline.Artifact("BuildOutput")
         
         #SOURCE
         # Define your pipeline source stage - ADD stage to pipline
@@ -138,13 +139,13 @@ class CodepipelineStack(Stack):
             action_name="LintAction",
             project=cfn_lint_project,
             input=source_output,
-            outputs=[build_output]
+            outputs=[build_output1]
         )
         self.validate_action = codepipeline_actions.CodeBuildAction(
             action_name="ValidateAction",
             project=cfn_validate_project,
             input=source_output,
-            outputs=[build_output]
+            outputs=[build_output2]
         )
 
         # Add defined action to Build stage

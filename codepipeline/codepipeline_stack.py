@@ -47,13 +47,19 @@ class CodepipelineStack(Stack):
 
         #BUILD
 
+        cfn_lint_project_name = "cfn_lint_project"  # Replace with your CodeBuild project name
+        cfn_lint_project = codebuild.Project.from_project_name(
+            self,
+            "MyCodeBuildProject",
+            cfn_lint_project_name
+        )
         # Define your pipeline build stage - ADD stage to pipline
         self.build_stage = self.pipeline.add_stage(stage_name="Build")
         
         # Define action for build stage 
         self.build_action = codepipeline_actions.CodeBuildAction(
             action_name="BuildAction",
-            project=your_codebuild_project,
+            project=cfn_lint_project,
             input=source_output,
             outputs=[build_output]
         )

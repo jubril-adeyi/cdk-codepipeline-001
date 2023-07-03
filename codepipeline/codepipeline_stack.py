@@ -71,12 +71,13 @@ class CodepipelineStack(Stack):
                 "phases": {
                     "install": {
                         "commands": [
-                            "pip3 install cfn-lint"
+                            "pip3 install cfn-lint",
+                            "pip3 install -r requirements.txt",
                         ]
                     },
                     "build": {
                         "commands": [
-                            "cdk synth >> template.json"
+                            "cdk synth >> template.json",
                             "cfn-lint  template.json",
                         ]
                     }

@@ -16,8 +16,8 @@ class CodepipelineStack(Stack):
         # Create the CodePipeline pipeline
         self.pipeline = codepipeline.Pipeline(self, "MyPipeline")
         source_output = codepipeline.Artifact("SourceOutput")
-        build_output1 = codepipeline.Artifact("BuildOutput")
-        build_output2 = codepipeline.Artifact("BuildOutput")
+        build_output1 = codepipeline.Artifact("BuildOutputLint")
+        build_output2 = codepipeline.Artifact("BuildOutputValidate")
         
         #SOURCE
         # Define your pipeline source stage - ADD stage to pipline

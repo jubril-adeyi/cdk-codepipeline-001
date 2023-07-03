@@ -59,12 +59,12 @@ class CodepipelineStack(Stack):
 
         # Define new build
 
-        # Define CodeBuild project with custom Docker image
+        # Define lint project with custom Docker image
         custom_image = "slickboy/cdk-nodejs:1.1"
         existing_role_arn = "arn:aws:iam::723389358939:role/service-role/codebuild-build-001-service-role"
         cfn_lint_project = codebuild.Project(
             self,
-            "MyCodeBuildProject",
+            "LintProject",
             project_name="cfn-lint-project",
             build_spec=codebuild.BuildSpec.from_object({
                 "version": "0.2",
@@ -95,19 +95,61 @@ class CodepipelineStack(Stack):
             )
         )
 
+        # Define validate project with custom Docker image
+     
+        cfn_validate_project = codebuild.Project(
+            self,
+            "ValidateProject",
+            project_name="cfn-validate-project",
+            build_spec=codebuild.BuildSpec.from_object({
+                "version": "0.2",
+                "phases": {
+                    "install": {
+                        "commands": [
+                            "pip3 install cfn-policy-validator",
+                            "pip3 install -r requirements.txt",
+                        ]
+                    },
+                    "build": {
+                        "commands": [
+                            "cdk synth >> template.json",
+                            "cfn-policy-validator validate --template-path template.json --region us-west-1",
+                        ]
+                    }
+                }
+            }),
+            environment=codebuild.BuildEnvironment(
+                build_image=codebuild.LinuxBuildImage.from_docker_registry(custom_image),
+                privileged=None  # Set to True if you need elevated privileges
+            ),
+
+            role=iam.Role.from_role_arn(
+                self,
+                "ExistingCodeBuildRole",
+                role_arn=existing_role_arn
+            )
+        )
+
         # Define your pipeline build stage - ADD stage to pipline
-        self.build_stage = self.pipeline.add_stage(stage_name="Build")
+        self.validate_stage = self.pipeline.add_stage(stage_name="Validate")
         
-        # Define action for build stage 
-        self.build_action = codepipeline_actions.CodeBuildAction(
-            action_name="BuildAction",
+        # Define actions for Validate stage 
+        self.lint_action = codepipeline_actions.CodeBuildAction(
+            action_name="LintAction",
             project=cfn_lint_project,
+            input=source_output,
+            outputs=[build_output]
+        )
+        self.validate_action = codepipeline_actions.CodeBuildAction(
+            action_name="ValidateAction",
+            project=cfn_validate_project,
             input=source_output,
             outputs=[build_output]
         )
 
         # Add defined action to Build stage
-        self.build_stage.add_action(self.build_action)
+        self.validate_stage.add_action(self.lint_action)
+        self.validate_stage.add_action(self.validate_action)
   
 
 

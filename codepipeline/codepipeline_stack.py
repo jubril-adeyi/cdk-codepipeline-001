@@ -90,7 +90,7 @@ class CodepipelineStack(Stack):
 
             role=iam.Role.from_role_arn(
                 self,
-                "ExistingCodeBuildRole",
+                "CodeBuildRoleLint",
                 role_arn=existing_role_arn
             )
         )
@@ -125,7 +125,7 @@ class CodepipelineStack(Stack):
 
             role=iam.Role.from_role_arn(
                 self,
-                "ExistingCodeBuildRole",
+                "CodeBuildRoleValidate",
                 role_arn=existing_role_arn
             )
         )

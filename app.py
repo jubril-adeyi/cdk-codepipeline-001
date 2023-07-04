@@ -7,8 +7,7 @@ from codepipeline.codepipeline_stack import CodepipelineStack
 
 
 app = cdk.App()
-CodepipelineStack(app, "CodepipelineStack",
-    )
+CodepipelineStack(app, "CodepipelineStack")
 
 
 

@@ -113,8 +113,8 @@ class CodepipelineStack(Stack):
                     },
                     "build": {
                         "commands": [
-                            "cdk synth >> template.json",
-                            "cfn-policy-validator validate --template-path template.json --region us-west-1",
+                            "cdk synth IAMUserStack>> iamtemplate.json",
+                            "cfn-policy-validator validate --template-path iamtemplate.json --region us-west-1",
                         ]
                     }
                 }

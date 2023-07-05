@@ -14,12 +14,15 @@ class CodepipelineStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # Create the CodePipeline pipeline
+      
         self.pipeline = codepipeline.Pipeline(self, "MyPipeline")
+
+        # Create all Artifacts 
         source_output = codepipeline.Artifact("SourceOutput")
         build_output1 = codepipeline.Artifact("BuildOutputLint")
         build_output2 = codepipeline.Artifact("BuildOutputValidate")
         
-        #SOURCE
+        # SOURCE STAGE 
         # Define your pipeline source stage - ADD stage to pipline
         self.source_stage = self.pipeline.add_stage(stage_name="Source")
 
